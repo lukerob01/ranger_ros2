@@ -43,6 +43,7 @@
 #include "ranger_msgs/msg/motor_state.hpp"
 
 #include "ranger_base/ranger_params.hpp"
+#include "ranger_base/ranger_mini_v3_base.hpp"
 
 namespace westonrobot {
 class RangerROSMessenger : public std::enable_shared_from_this<RangerROSMessenger>
@@ -81,7 +82,7 @@ class RangerROSMessenger : public std::enable_shared_from_this<RangerROSMessenge
   double ConvertCentralAngleToInner(double angle);
 
   std::shared_ptr<rclcpp::Node> node_;
-  std::shared_ptr<RangerRobot> robot_;
+  std::shared_ptr<RangerBase> robot_;
   RangerSubType robot_type_;
   RobotParams robot_params_;
 

@@ -71,7 +71,8 @@ struct RangerMiniV3Params {
       0.494;  // in meter (front & rear wheel distance) //ranger-mini 0.494
 
   static constexpr double max_linear_speed = 1.5;      // in m/s
-  static constexpr double max_angular_speed = 4.8;  // in rad/s
+  // firmware spin limit: 1.0 m/s wheel speed at 0.307 m from the centre
+  static constexpr double max_angular_speed = 3.259;  // in rad/s
   static constexpr double max_speed_cmd = 10.0;        // in rad/s
 
   static constexpr double max_steer_angle_central = 0.4782;  //~= 27.40 degree

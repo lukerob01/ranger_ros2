@@ -26,14 +26,18 @@ RangerROSMessenger::RangerROSMessenger(rclcpp::Node::SharedPtr& node){
   LoadParameters();
 
   // connect to robot and setup ROS subscription
+  // Same classes RangerRobot would create, except the Mini 3, which needs its
+  // own command encoding (see ranger_mini_v3_base.hpp)
   if (robot_type_ == RangerSubType::kRangerMiniV1) {
-    robot_ = std::make_shared<RangerRobot>(RangerRobot::Variant::kRangerMiniV1);
+    robot_ = std::make_shared<RangerMiniV1Base>();
   } else if (robot_type_ == RangerSubType::kRangerMiniV2) {
-    robot_ = std::make_shared<RangerRobot>(RangerRobot::Variant::kRangerMiniV2);
+    robot_ = std::make_shared<RangerMiniV2Base>();
   } else if (robot_type_ == RangerSubType::kRangerMiniV3) {
-    robot_ = std::make_shared<RangerRobot>(RangerRobot::Variant::kRangerMiniV3);
+    double spin_radius = std::hypot(robot_params_.wheelbase / 2.0,
+                                    robot_params_.track / 2.0);
+    robot_ = std::make_shared<RangerMiniV3CmdBase>(spin_radius);
   } else {
-    robot_ = std::make_shared<RangerRobot>(RangerRobot::Variant::kRanger);
+    robot_ = std::make_shared<RangerBase>();
   }
 
   if (port_name_.find("can") != std::string::npos) {
@@ -516,7 +520,12 @@ double RangerROSMessenger::CalculateSteeringAngle(geometry_msgs::msg::Twist msg,
   w = robot_params_.track;
   x = sqrt(radius * radius + (l / 2) * (l / 2));
   // phi_i = atan((l / 2) / (x - w / 2));
-  phi_i = atan((l / 2) / radius);
+  if (robot_type_ == RangerSubType::kRangerMiniV3 && radius > w / 2) {
+    // The Mini 3 steering command is the inner wheel angle
+    phi_i = atan((l / 2) / (radius - w / 2));
+  } else {
+    phi_i = atan((l / 2) / radius);
+  }
 
   const double max_phi_rad = 40.0 * M_PI / 180.0;
   phi_i = std::min(phi_i, max_phi_rad);
