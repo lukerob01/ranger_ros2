@@ -7,8 +7,9 @@
     <arg name="update_rate" default="50" />
     <arg name="odom_topic_name" default="odom" />
     <arg name="publish_odom_tf" default="false" />
+    <arg name="namespace" default="" />
 
-    <node name="ranger_base_node" pkg="ranger_base" exec="ranger_base_node" output="both">
+    <node name="ranger_base_node" pkg="ranger_base" exec="ranger_base_node" namespace="$(var namespace)" output="both">
         <param name="port_name"  value="$(var port_name)" />
         <param name="robot_model"  value="$(var robot_model)" />
         <param name="odom_frame"  value="$(var odom_frame)" />

@@ -30,8 +30,11 @@ def generate_launch_description():
                                                  description='Simulation control loop update rate')
     robot_model_arg = DeclareLaunchArgument('robot_model', default_value='ranger_mini_v2',
                                            description='robot motion model')
+    namespace_arg = DeclareLaunchArgument('namespace', default_value='',
+                                          description='Namespace for the node and its topics')
     ranger_base_node = launch_ros.actions.Node(
         package='ranger_base',
+        namespace=launch.substitutions.LaunchConfiguration('namespace'),
         executable='ranger_base_node',
         output='screen',
         emulate_tty=True,
@@ -55,5 +58,6 @@ def generate_launch_description():
         publish_odom_tf_arg,
         update_rate_arg,
         robot_model_arg,
+        namespace_arg,
         ranger_base_node
     ])

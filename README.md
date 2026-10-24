@@ -101,14 +101,16 @@ $ colcon build
 
 ### Published topics
 
-* /system_state (ranger_msgs::SystemState)
-* /motion_state (ranger_msgs::MotionState)
-* /actuator_state (ranger_msgs::ActuatorStateArray)
-* /odom (nav_msgs::Odometry)
-* /battery_state (sensor_msgs::BatteryState)
+* system_state (ranger_msgs::SystemState)
+* motion_state (ranger_msgs::MotionState)
+* actuator_state (ranger_msgs::ActuatorStateArray)
+* odom (nav_msgs::Odometry)
+* battery_state (sensor_msgs::BatteryState)
 
 ### Subscribed topics
 
-* /cmd_vel (geometry_msgs::Twist)
+* cmd_vel (geometry_msgs::Twist)
+
+Topic names are relative, so they follow the node's namespace. Every launch file takes a `namespace` argument, e.g. `ros2 launch ranger_bringup ranger_mini_v3.launch.py namespace:=robot1` gives `/robot1/cmd_vel`, `/robot1/odom` and so on. With no namespace they stay at `/cmd_vel` etc.
 
 ### Services
