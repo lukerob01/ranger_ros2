@@ -53,13 +53,15 @@ class RangerMiniV3CmdBase : public RangerBase {
     cmd.linear = linear_vel;
     cmd.angular = 0.0;
     cmd.lateral = kSpinSign * angular_vel * spin_radius;
-    cmd.steering = steer_angle * 180.0 / M_PI / 10.0;
+    cmd.steering = kSteerSign * steer_angle * 180.0 / M_PI / 10.0;
     return cmd;
   }
 
-  // Sign of bytes 4-5 relative to ROS (counter-clockwise positive). Matches
-  // ugv_sdk's Ranger Mini 1.0 handling.
-  static constexpr double kSpinSign = -1.0;
+  // Signs relative to ROS (left / counter-clockwise positive), checked on a
+  // robot: positive bytes 4-5 spin it counter-clockwise, and positive
+  // bytes 6-7 steer it right.
+  static constexpr double kSpinSign = 1.0;
+  static constexpr double kSteerSign = -1.0;
 
  private:
   double spin_radius_;
